@@ -21,16 +21,10 @@ function Result() {
 
     var resultFromServer = {
         rate: "%90 Fake",
-        message: "Your video/image is fake",
-        video: {
-            name: "test.mp4",
-            resolution: "1280x720",
-            length: 120
-        },
-        image: {
-            name: "test.jpeg",
-            resolution: "1280x720"
-        }
+        message: "Your video is fake",
+        name: "test.mp4",
+        resolution: "1280x720",
+        length: 120
     };
 
     return (
@@ -47,31 +41,18 @@ function Result() {
                         </Col>
                     </Row>
                 </Card.Body>
-                {resultFromServer.video && <div>
+                {resultFromServer && <div>
                     <Card.Header as="h5">Video Info</Card.Header>
                     <Card.Body>
                         <Row>
                             <Col>
-                                Name: {resultFromServer.video.name}
+                                Name: {resultFromServer.name}
                             </Col>
                             <Col>
-                                Length: {resultFromServer.video.length} seconds
+                                Length: {resultFromServer.length} seconds
                             </Col>
                             <Col>
-                                Resolution: {resultFromServer.video.resolution}
-                            </Col>
-                        </Row>
-                    </Card.Body>
-                </div>}
-                {resultFromServer.image && <div>
-                    <Card.Header as="h5">Image Info</Card.Header>
-                    <Card.Body>
-                        <Row>
-                            <Col>
-                                Name: {resultFromServer.image.name}
-                            </Col>
-                            <Col>
-                                Resolution: {resultFromServer.image.resolution}
+                                Resolution: {resultFromServer.resolution}
                             </Col>
                         </Row>
                     </Card.Body>

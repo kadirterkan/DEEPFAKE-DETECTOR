@@ -3,15 +3,17 @@ import BaseRemoteService from "../../common/infra/remoteservice/BaseRemoteServic
 
 class DetectionRemoteService extends BaseRemoteService {
 
-    getResultByImage(image, successFunction) {
-        axios.post(`http://localhost:8080//detector/detectImage`, {image})
-            .then(reason => successFunction(reason))
-            .catch(reason => this.catchResponseFromServerToaster(reason));
-    }
+    // getResultByImage(image, successFunction) {
+    //     axios.post(`http://localhost:8080//detector/detectImage`, {image})
+    //         .then(reason => successFunction(reason))
+    //         .catch(reason => this.catchResponseFromServerToaster(reason));
+    // }
 
     getResultByVideo(video, successFunction) {
-        axios.post(`http://localhost:8080//detector/detectVideo`, {video})
-            .then(reason => successFunction(reason))
+        const formData = new FormData();
+        formData.append("video", video);
+        axios.post(`http://localhost:8080//detector/detectVideo`, {formData}, {headers: { "Content-Type": "multipart/form-data" }})
+            .then(result => successFunction(result))
             .catch(reason => this.catchResponseFromServerToaster(reason));
     }
 }

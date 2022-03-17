@@ -7,13 +7,14 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Menu from "./common/infra/menu/Menu";
 import Result from "./detection/result/Result";
 import About from "./about/About";
+import Upload from "./detection/upload/Upload";
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
             <Menu/>
             <Routes>
-                <Route path="/" element={<Result/>}/>
+                <Route path="/" element={<Upload/>}/>
                 <Route path="/result" element={<Result/>}/>
                 <Route path="/about" element={<About/>}/>
             </Routes>
