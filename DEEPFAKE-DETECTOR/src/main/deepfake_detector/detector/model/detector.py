@@ -16,7 +16,7 @@ transform = transforms.Compose(
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
 def get_video_props():
-    cap = cv.VideoCapture('id0_0000.mp4')
+    cap = cv.VideoCapture('test.mp4')
     fps = cap.get(cv.CAP_PROP_FPS)
     frame_count = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
 
@@ -112,6 +112,6 @@ def detector():
     probs = detect_deepfake(face_tensors)
     mean = calculate(probs)
 
-    print({"fake" : mean[0], "real" : mean[1], "fps": fps, "width" : width, "height" : height, "duration" : duration})
+    print({"fake" : mean[0], "real" : mean[1], "fps": round(fps), "width" : width, "height" : height, "duration" : round(duration)})
 
 detector()

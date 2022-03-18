@@ -1,12 +1,12 @@
 from django.db import models
 import cv2
-from model.detector import Detector
 
-detector = Detector()
+class Video(models.Model):
+    caption = models.CharField(max_length = 100)
+    video = models.FileField(upload_to="video/%y")
 
-# Create your models here.
-def detect_image(image):
-    return detector.detect_image(image)
+    def __str__(self):
+        return self.caption
 
 def detect_video(video):
     return

@@ -12,7 +12,7 @@ class DetectionRemoteService extends BaseRemoteService {
     getResultByVideo(video, successFunction) {
         const formData = new FormData();
         formData.append("video", video);
-        axios.post(`http://localhost:8080//detector/detectVideo`, {formData}, {headers: { "Content-Type": "multipart/form-data" }})
+        axios.post(`http://127.0.0.1:8000/detectVideo`, {formData}, {headers: { "Content-Type": "multipart/form-data" }})
             .then(result => successFunction(result))
             .catch(reason => this.catchResponseFromServerToaster(reason));
     }
