@@ -17,7 +17,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-g7(j#4n)-k^j=&vokgi4zsl%&zp0%f9n-hu@3x6v6)mwid$txs'
+SECRET_KEY = 'DJANGO_CHECK'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
