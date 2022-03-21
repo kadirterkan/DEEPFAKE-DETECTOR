@@ -1,4 +1,4 @@
-.BACK_END/media
+/BACK_END/media/
 BACK_END/.DS_Store
 BACK_END/detector/.DS_Store
 BACK_END/detector/api/__pycache__/__init__.cpython-310.pyc

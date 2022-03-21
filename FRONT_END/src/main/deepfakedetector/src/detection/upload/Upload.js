@@ -1,10 +1,12 @@
 import {Button, Card, Form} from "react-bootstrap";
 import {useState} from "react";
 import DetectionRemoteService from "../common/DetectionRemoteService";
+import { useNavigate } from "react-router-dom";
 
 function Upload() {
 
     const [video, setVideo] = useState(null);
+    const navigate = useNavigate();
 
     const handleVideoUpload = (event) => {
         setVideo(event.target.files[0]);
@@ -12,6 +14,7 @@ function Upload() {
 
     const successFunction = (result) => {
         console.log(result);
+        navigate('/result', {result : result});
     };
 
     const handleClick = () => {
