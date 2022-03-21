@@ -14,7 +14,7 @@ function Upload() {
 
     const successFunction = (result) => {
         console.log(result);
-        navigate('/result', {result : result});
+        navigate('/result', {state : result.data});
     };
 
     const handleClick = () => {

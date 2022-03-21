@@ -17,15 +17,11 @@ transform = transforms.Compose(
 
 def get_video_props(directory):
     cap = cv.VideoCapture(directory)
-    print(cap)
     fps = cap.get(cv.CAP_PROP_FPS)
     frame_count = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
 
     width = cap.get(cv.CAP_PROP_FRAME_WIDTH)
     height = cap.get(cv.CAP_PROP_FRAME_HEIGHT)
-
-    print(width)
-    print(height)
 
     duration = frame_count / fps
 
@@ -117,5 +113,5 @@ def detector(directory):
     probs = detect_deepfake(face_tensors)
     mean = calculate(probs)
 
-    results = {"fake" : mean[0], "real" : mean[1], "fps": round(fps), "width" : width, "height" : height, "duration" : round(duration)}
+    results = {"data" : [mean[0]*100,mean[1]*100], "fps": round(fps), "res": str(int(width)) + "x" + str(int(height)), "duration" : round(duration)}
     return results

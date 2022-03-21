@@ -1,6 +1,8 @@
 import {Card, Col, Row} from "react-bootstrap";
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
 import {Doughnut} from 'react-chartjs-2';
+import {useLocation} from 'react-router-dom';
+import {useEffect, useState} from 'react';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -9,15 +11,22 @@ export const backgroundColor = ['rgba(255,0,0,1)', 'rgba(0,128,0,1)'];
 
 function Result() {
 
-    var data = {
-        labels: labels,
-        datasets: [
-            {
-                data: [80, 20],
-                backgroundColor: backgroundColor
-            }
-        ]
-    };
+    const[data, setData] = useState(null);
+
+    const {state} = useLocation();
+
+    useEffect(() => {
+        console.log(state);
+        setData({
+            labels: labels,
+            datasets: [
+                {
+                    data: state.data,
+                    backgroundColor: backgroundColor
+                }
+            ]
+        });
+      }, []);
 
     var resultFromServer = {
         rate: "%90 Fake",
@@ -28,36 +37,40 @@ function Result() {
     };
 
     return (
-        <div className="d-flex flex-column min-vh-100 justify-content-center align-items-center">
-            <Card style={{width: '50rem'}}>
-                <Card.Header as="h5">Result</Card.Header>
-                <Card.Body>
-                    <Row>
-                        <Col>
-                            Result:<Doughnut data={data}/>
-                        </Col>
-                        <Col>
-                            {resultFromServer.message}
-                        </Col>
-                    </Row>
-                </Card.Body>
-                {resultFromServer && <div>
-                    <Card.Header as="h5">Video Info</Card.Header>
+        <div>
+            {data &&
+                <div className="d-flex flex-column min-vh-100 justify-content-center align-items-center">
+                <Card style={{width: '50rem'}}>
+                    <Card.Header as="h5">Result</Card.Header>
                     <Card.Body>
                         <Row>
                             <Col>
-                                Name: {resultFromServer.name}
+                                Result:<Doughnut data={data}/>
                             </Col>
                             <Col>
-                                Length: {resultFromServer.length} seconds
-                            </Col>
-                            <Col>
-                                Resolution: {resultFromServer.resolution}
+                                {resultFromServer.message}
                             </Col>
                         </Row>
                     </Card.Body>
-                </div>}
-            </Card>
+                    <div>
+                        <Card.Header as="h5">Video Info</Card.Header>
+                        <Card.Body>
+                            <Row>
+                                <Col>
+                                    Name: {resultFromServer.name}
+                                </Col>
+                                <Col>
+                                    Length: {state.duration} seconds
+                                </Col>
+                                <Col>
+                                    Resolution: {state.res}
+                                </Col>
+                            </Row>
+                        </Card.Body>
+                    </div>
+                </Card>
+            </div>
+        }
         </div>
     );
 }
