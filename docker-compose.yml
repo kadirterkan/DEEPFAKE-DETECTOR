@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+  backend:
+    build: ./BACK_END/detector/
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+    volumes:
+      - ./BACK_END/detector:/app/backend 
+    ports: 
+      - "80:8000"
+  frontend:
+    build: ./FRONT_END/
+    command: ["npm", "start"]
+    volumes:
+      - ./FRONT_END/src/main/deepfakedetector:/app/frontend
+    ports:
+      - "30:3000"
