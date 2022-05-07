@@ -6,11 +6,14 @@ import torch
 import torchvision.transforms as transforms
 from facenet_pytorch import MTCNN
 import torch.nn.functional as F
+import pandas as pd
+import tempfile
 
 mtcnn = MTCNN()
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 model = coatnet_0().to(device)
 model.load_state_dict(torch.load(r'/app/backend/model_detector/coatnet.pt', map_location=torch.device('cpu')))
+#model.load_state_dict(torch.load(r'C:\Users\kadir\Documents\PROJE\DEEPFAKE-DETECTOR\backend\model_detector/coatnet.pt', map_location=torch.device('cpu')))
 transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -27,9 +30,9 @@ def get_video_props(directory):
 
     return cap, fps, width, height, duration
 
-def video_to_faces(cap, fps):
-    faces = []
+def video_to_faces(cap, df, fps):
     count = 0
+    dataframe_count = 0
 
     while cap.isOpened():
         ret, frame = cap.read()
@@ -38,13 +41,17 @@ def video_to_faces(cap, fps):
             break
         img_np = np.array(frame)
         frame = cv.cvtColor(img_np, cv.COLOR_RGB2BGR)
-        faces.append(face_detect(frame))
+
+        for result in detect_face_from_image(frame):
+            df.loc[dataframe_count] = result
+            dataframe_count+=1
+
         count += fps
         cap.set(cv.CAP_PROP_POS_FRAMES, count)
 
     cap.release()
     cv.destroyAllWindows()
-    return faces
+    return df
 
 def crop_face(img, box, margin=1):
     x1, y1, x2, y2 = box
@@ -55,37 +62,39 @@ def crop_face(img, box, margin=1):
     face = Image.fromarray(img).crop([x1, y1, x2, y2])
     return np.asarray(face)
 
-def face_detect(image):
-    faces = []
+def detect_face_from_image(image):
+    frames = []
 
     results = mtcnn.detect(image)
 
     if results is None:
         return
-
-    boxes, probs = results
     
+    boxes, probs = results
+
     if boxes is None or probs is None:
         return
-
+    
     for j, box in enumerate(boxes):
         if probs[j] > 0.98:
             face = crop_face(image, box)
             face = cv.cvtColor(face, cv.COLOR_RGB2BGR)
-            faces.append(face)
+            prob = detect(face)
+            frames.append([image, box, prob])
+    
+    return frames
 
-    return faces
+def face_to_tensor(face):
+    face_ = cv.resize(face, (224,224), interpolation = cv.INTER_AREA)
+    return transform(face_).unsqueeze_(0).to(device)
 
-def faces_to_tensor(faces):
-    face_tensors = []
 
-    for face in faces:
-        face = Image.fromarray(face[0])
-        face_ = face.resize((224,224))
-        image_tensor = transform(face_).unsqueeze_(0).to(device)
-        face_tensors.append(image_tensor)
+def detect(face):
+    face_tensor = face_to_tensor(face)
+    tensor = face_tensor.clone().detach()
+    output_ = model(tensor)
+    return F.softmax(output_, dim=1).tolist()[0][0]
 
-    return face_tensors
 
 def detect_deepfake(face_tensors):
     probs = []
@@ -99,19 +108,39 @@ def detect_deepfake(face_tensors):
     return probs
 
 def calculate(probs):
-    arr = np.asarray(probs)
+    arr = probs.loc[:,'prob']
 
+    arr = arr.values
+    
     mean = arr.mean(axis=0)
 
     return mean
 
-def detector(directory):
-    print(directory)
-    cap, fps, width, height, duration = get_video_props(directory)
-    faces = video_to_faces(cap, fps)
-    face_tensors = faces_to_tensor(faces)
-    probs = detect_deepfake(face_tensors)
-    mean = calculate(probs)
+def result_to_video(df, size):
+    temp = tempfile.NamedTemporaryFile(suffix='.webm')
+    out = cv.VideoWriter(temp.name , cv.VideoWriter_fourcc(*'vp80'), 1, size)
 
-    results = {"data" : [mean[0]*100,mean[1]*100], "fps": round(fps), "res": str(int(width)) + "x" + str(int(height)), "duration" : round(duration)}
-    return results
+    for i in range(len(df)):
+        frame = cv.cvtColor(df.loc[i, "frame"], cv.COLOR_RGB2BGR)
+        x1,y1,x2,y2 = df.loc[i, "box"]
+        frame = cv.rectangle(frame, (int(x1),int(y1)), (int(x2),int(y2)), (255, 0, 0), 2)
+        frame = cv.putText(frame, str(df.loc[i, "prob"]), (int(x1), int(y1 - 5)), cv.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 1)
+        out.write(frame)
+    out.release()
+
+    return temp
+
+
+def detector(directory):
+    df = pd.DataFrame(columns=["frame", "box", "prob"])
+    cap, fps, width, height, duration = get_video_props(directory)
+    df = video_to_faces(cap, df, fps)
+    video = result_to_video(df, (int(width), int(height)))
+    probs = calculate(df)
+    video.flush()
+
+    video.seek(0)
+
+    results = {'fps': round(fps), 'width': str(int(width)), "height": str(int(height)), 'duration' : round(duration), 'probs': probs}
+
+    return results, video

@@ -24,7 +24,7 @@ SECRET_KEY = 'DJANGO_CHECK'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["http://localhost:30", "127.0.0.1", "http://localhost:80", "localhost"]
+ALLOWED_HOSTS = ["http://localhost:3000", "127.0.0.1", "http://localhost:8000", "localhost"]
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'api',
     'corsheaders',
     'base',
+    'wsgiref',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +72,8 @@ TEMPLATES = [
         },
     },
 ]
+
+FILE_UPLOAD_HANDLERS = ['django.core.files.uploadhandler.TemporaryFileUploadHandler',]
 
 WSGI_APPLICATION = 'detector.wsgi.application'
 
@@ -117,7 +120,7 @@ USE_I18N = True
 USE_TZ = True
 
 CORS_ORIGIN_WHITELIST = (
-  'http://localhost:30',
+  'http://localhost:3000',
 )
 
 # Static files (CSS, JavaScript, Images)
@@ -125,8 +128,8 @@ CORS_ORIGIN_WHITELIST = (
 
 STATIC_URL = 'static/'
 STATIC_ROOT = './media/'
-MEDIA_URL ='/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+MEDIA_URL = '/app/frontend/src/assets/'
+MEDIA_ROOT = '/app/frontend/src/assets/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

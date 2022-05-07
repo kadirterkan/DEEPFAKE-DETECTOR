@@ -4,7 +4,7 @@ import DetectionRemoteService from "../common/DetectionRemoteService";
 import { useNavigate } from "react-router-dom";
 
 function Upload() {
-
+    
     const [video, setVideo] = useState(null);
     const navigate = useNavigate();
 
@@ -13,7 +13,7 @@ function Upload() {
     };
 
     const successFunction = (result) => {
-        console.log(result);
+        console.log(result.data);
         navigate('/result', {state : result.data});
     };
 
