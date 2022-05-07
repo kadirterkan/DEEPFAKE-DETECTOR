@@ -68,6 +68,10 @@ class VideoInfoCard extends React.Component {
                     <Row>
                         <h6>Video Resolution : {this.props.width + "x" + this.props.height + " pixels"}</h6>
                     </Row>
+                    <br/>
+                    <Row>
+                        <h6>Video Prediction : {this.props.prediction ? "Your video contains deepfake. = DEEPFAKE DETECTED" : "Your video doesn't contain deepfake. = NO DEEPFAKE DETECTED"}</h6>
+                    </Row>
                 </>
             );
         }
@@ -146,7 +150,7 @@ export class ResponseCard extends React.Component {
                     <Row className='d-flex justify-content-center'>
                         <CardGroup>
                             <ResultCard data={this.props.data}/>
-                            <VideoInfoCard duration={this.props.state['duration']} width={this.props.state['width']} height={this.props.state['height']}/>
+                            <VideoInfoCard duration={this.props.state['duration']} width={this.props.state['width']} height={this.props.state['height']} prediction={this.props.state['prediction']}/>
                         </CardGroup>
                     </Row>
                     <Row className='d-flex justify-content-center'>
