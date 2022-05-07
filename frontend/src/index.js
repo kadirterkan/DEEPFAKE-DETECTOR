@@ -8,6 +8,10 @@ import Menu from "./common/infra/menu/Menu";
 import Result from "./detection/result/Result";
 import About from "./about/About";
 import Upload from "./detection/upload/Upload";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
+toast.configure();
 
 ReactDOM.render(
     <React.StrictMode>
