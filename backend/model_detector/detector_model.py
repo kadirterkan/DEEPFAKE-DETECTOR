@@ -13,7 +13,7 @@ mtcnn = MTCNN()
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 model = coatnet_0().to(device)
 model.load_state_dict(torch.load(r'/app/backend/model_detector/coatnet.pt', map_location=torch.device('cpu')))
-#model.load_state_dict(torch.load(r'C:\Users\kadir\Documents\PROJE\DEEPFAKE-DETECTOR\backend\model_detector/coatnet.pt', map_location=torch.device('cpu')))
+model.eval()
 transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])

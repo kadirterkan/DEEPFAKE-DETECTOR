@@ -2,10 +2,7 @@ from django.db import models
 from model_detector import detector_model
 from django.core import files
 from django.db.models import Max
-from django.shortcuts import get_object_or_404
 
-
-# Create your models here.
 class Video(models.Model):
     id = models.AutoField(primary_key=True)
     video = models.FileField(upload_to='video/')
@@ -24,6 +21,3 @@ def detect_by_video(destination):
     video_model.save()
     result['video_id'] = video_model.get_id()
     return result
-
-def get_video_by_id(video_id):
-    return get_object_or_404(Video, id = video_id)
