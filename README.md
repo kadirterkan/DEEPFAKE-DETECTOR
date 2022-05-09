@@ -4,6 +4,6 @@
 ### docker-compose up
 
 Frontend
-localhost:30
+localhost:3000
 Backend
-localhost:80
+localhost:8000
