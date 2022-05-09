@@ -141,6 +141,6 @@ def detector(directory):
 
     video.seek(0)
 
-    results = {'fps': round(fps), 'width': str(int(width)), "height": str(int(height)), 'duration' : round(duration), 'probs': probs}
+    results = {'fps': round(fps), 'width': str(int(width)), "height": str(int(height)), 'duration' : round(duration), 'probs': probs, 'prediction': probs > 0.5 }
 
     return results, video
