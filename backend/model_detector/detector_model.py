@@ -1,4 +1,3 @@
-from .coatnet import coatnet_0
 import cv2 as cv
 import numpy as np
 from PIL import Image
@@ -8,12 +7,13 @@ from facenet_pytorch import MTCNN
 import torch.nn.functional as F
 import pandas as pd
 import tempfile
+from models import build_model
 
 mtcnn = MTCNN()
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-model = coatnet_0().to(device)
-model.load_state_dict(torch.load(r'/app/backend/model_detector/coatnet.pt', map_location=torch.device('cpu')))
-#model.load_state_dict(torch.load(r'C:\Users\kadir\Documents\PROJE\DEEPFAKE-DETECTOR\backend\model_detector/coatnet.pt', map_location=torch.device('cpu')))
+model = build_model()
+model.load_state_dict(torch.load(r'/app/backend/model_detector/metaformer.pt', map_location=torch.device('cpu')))
+model.eval()
 transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])

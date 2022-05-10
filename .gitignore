@@ -28,6 +28,8 @@ backend/base/migrations/0002_video_title.py
 backend/base/migrations/0003_alter_video_title.py
 backend/base/migrations/0004_remove_video_title.py
 backend/model_detector/coatnet.pt
+backend/model_detector/metaformer.pt
+backend/model_detector/models/__pycache__
 backend/model_detector/__pycache__
 backend/api/__pycache__
 backend/base/__pycache__
