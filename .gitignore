@@ -52,3 +52,4 @@ frontend/package-lock.json
 frontend/src/assets
 media/video
 .DS_Store
+backend/model_detector/metafg_2_21k_224.pth
